@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "270112168093",
+    "firebase_url": "https://auth-509cc-default-rtdb.firebaseio.com",
+    "project_id": "auth-509cc",
+    "storage_bucket": "auth-509cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:270112168093:android:cbea5c43fe5a02b57ddc74",
+        "android_client_info": {
+          "package_name": "com.sahilasopa.auth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "270112168093-r72u696onb8f1kf6vmp2o4n0k0kl1cde.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sahilasopa.auth",
+            "certificate_hash": "e267cc11291adf6648ec26db26faff694484ad80"
+          }
+        },
+        {
+          "client_id": "270112168093-98nhfah43ollt7n5g9vv7qu2tlr55785.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANr1eynQ7iETcLXpFcJLbKLHXYYJoQ97w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "270112168093-98nhfah43ollt7n5g9vv7qu2tlr55785.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
