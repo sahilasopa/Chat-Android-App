@@ -45,14 +45,14 @@ public class Register extends AppCompatActivity {
         progressDialog.setTitle("Creating Account");
         progressDialog.setMessage("we're creating your account");
         binding.signup.setOnClickListener(v -> {
-            if (binding.registerEmail.getText().toString().isEmpty() || binding.registerPassword.getText().toString().isEmpty() || binding.registerUsername.getText().toString().isEmpty()){
-                if (binding.registerEmail.getText().toString().isEmpty()){
+            if (binding.registerEmail.getText().toString().isEmpty() || binding.registerPassword.getText().toString().isEmpty() || binding.registerUsername.getText().toString().isEmpty()) {
+                if (binding.registerEmail.getText().toString().isEmpty()) {
                     binding.registerEmail.setError("This Field Is Required");
                     binding.registerEmail.requestFocus();
-                }else if (binding.registerPassword.getText().toString().isEmpty()){
+                } else if (binding.registerPassword.getText().toString().isEmpty()) {
                     binding.registerPassword.setError("This Field Is Required");
                     binding.registerPassword.requestFocus();
-                }else if (binding.registerUsername.getText().toString().isEmpty()){
+                } else if (binding.registerUsername.getText().toString().isEmpty()) {
                     binding.registerUsername.setError("This Field Is Required");
                     binding.registerUsername.requestFocus();
                 }
@@ -64,6 +64,7 @@ public class Register extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Users user = new Users(binding.registerUsername.getText().toString(), binding.registerEmail.getText().toString(), binding.registerPassword.getText().toString());
                     String id = Objects.requireNonNull(task.getResult().getUser()).getUid();
+                    user.setId(id);
                     database.getReference().child("Users").child(id).setValue(user);
                     Toast.makeText(Register.this, "User Created Successfully", Toast.LENGTH_SHORT).show();
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

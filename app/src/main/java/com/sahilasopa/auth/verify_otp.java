@@ -63,6 +63,7 @@ public class verify_otp extends AppCompatActivity {
             if (task.isSuccessful()) {
                 Users users = new Users();
                 users.setContact_no(contact_no);
+                users.setId(Objects.requireNonNull(task.getResult().getUser()).getUid());
                 String id = Objects.requireNonNull(task.getResult().getUser()).getUid();
                 database.getReference().child("Users").child(id).setValue(users);
                 Intent main = new Intent(this, MainActivity.class);
