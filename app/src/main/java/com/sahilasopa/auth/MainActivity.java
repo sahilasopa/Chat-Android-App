@@ -40,8 +40,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
-//                    String name = ds.child("id").getValue(String.class);
-//                    Log.d("TAG", name);
+                    String name = ds.child("id").getValue(String.class);
+                    Log.d("TAG", name);
+                    user_list.add(name);
                 }
             }
 

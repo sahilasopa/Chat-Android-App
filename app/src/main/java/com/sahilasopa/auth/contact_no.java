@@ -25,9 +25,14 @@ public class contact_no extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         binding.btn1.setOnClickListener(v -> {
-            if (binding.contactNo.getText().toString().isEmpty()) {
-                binding.contactNo.setError("Please Enter A Valid Phone No");
-                binding.contactNo.requestFocus();
+            if (binding.contactNo.getText().toString().isEmpty() || binding.username.getText().toString().isEmpty()) {
+                if (binding.username.getText().toString().isEmpty()) {
+                    binding.username.setError("Please Enter A Username");
+                    binding.username.requestFocus();
+                } else if (binding.contactNo.getText().toString().isEmpty()) {
+                    binding.contactNo.setError("Please Enter A Valid Phone No");
+                    binding.contactNo.requestFocus();
+                }
                 return;
             }
             String countryCode = binding.ccp.getSelectedCountryCode();
@@ -35,6 +40,7 @@ public class contact_no extends AppCompatActivity {
             String contactNo = "+".concat(countryCode).concat(" " + phone_no);
             Intent otp = new Intent(this, verify_otp.class);
             otp.putExtra("contact_no", contactNo);
+            otp.putExtra("username", binding.username.getText().toString());
             startActivity(otp);
         });
     }
