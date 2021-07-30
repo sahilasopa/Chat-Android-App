@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +31,7 @@ public class verify_otp extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         binding = ActivityVerifyOtpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -38,7 +40,7 @@ public class verify_otp extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         contact_no = getIntent().getExtras().get("contact_no").toString();
         sendVerificationCode(contact_no);
-        binding.button.setOnClickListener(v -> {
+        binding.buttonVerify.setOnClickListener(v -> {
             String code = binding.otp.getText().toString();
             if (code.isEmpty() || code.length() < 6) {
                 binding.otp.setError("Enter A Valid Code");
@@ -47,7 +49,7 @@ public class verify_otp extends AppCompatActivity {
             }
             verifyCode(code);
         });
-        binding.textView4.setOnClickListener(v -> {
+        binding.resend.setOnClickListener(v -> {
             sendVerificationCode(contact_no);
             Toast.makeText(this, "Verification Code Sent", Toast.LENGTH_SHORT).show();
         });
@@ -72,7 +74,7 @@ public class verify_otp extends AppCompatActivity {
                 startActivity(main);
             } else {
                 Log.v("response", Objects.requireNonNull(task.getException()).toString());
-                if (task.getException().toString().contains("com.google.firebase.auth.FirebaseAuthInvalidCredentialsException")){
+                if (task.getException().toString().contains("com.google.firebase.auth.FirebaseAuthInvalidCredentialsException")) {
                     Toast.makeText(this, "Invalid Verification Code", Toast.LENGTH_SHORT).show();
                 }
             }

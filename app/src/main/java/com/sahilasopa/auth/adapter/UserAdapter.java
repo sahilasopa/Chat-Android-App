@@ -1,6 +1,7 @@
 package com.sahilasopa.auth.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.sahilasopa.auth.MessageActivity;
 import com.sahilasopa.auth.R;
 import com.sahilasopa.auth.models.Users;
 
@@ -50,7 +51,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.textView);
-            ConstraintLayout cardView = itemView.findViewById(R.id.userView);
+            CardView cardView = itemView.findViewById(R.id.userView);
             textView.setOnClickListener(this);
             cardView.setOnClickListener(this);
         }
@@ -59,7 +60,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         public void onClick(View v) {
             int pos = getAdapterPosition();
             Users user = users.get(pos);
-            Toast.makeText(context, user.getUsername(), Toast.LENGTH_SHORT).show();
+            Intent chat = new Intent(context, MessageActivity.class);
+            chat.putExtra("user", user.getId());
+            chat.putExtra("username", user.getUsername());
+            context.startActivity(chat);
         }
     }
 }

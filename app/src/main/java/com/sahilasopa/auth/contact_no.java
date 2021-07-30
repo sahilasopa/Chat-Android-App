@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
@@ -18,13 +19,14 @@ public class contact_no extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         binding = ActivityContactNoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Objects.requireNonNull(getSupportActionBar()).hide();
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        binding.btn1.setOnClickListener(v -> {
+        binding.buttonSendOtp.setOnClickListener(v -> {
             if (binding.contactNo.getText().toString().isEmpty() || binding.username.getText().toString().isEmpty()) {
                 if (binding.username.getText().toString().isEmpty()) {
                     binding.username.setError("Please Enter A Username");

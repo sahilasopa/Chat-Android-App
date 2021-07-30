@@ -6,18 +6,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -37,6 +35,7 @@ public class login extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -49,19 +48,19 @@ public class login extends AppCompatActivity {
         progressDialog.setMessage("Login to your account");
         Intent intent = new Intent(this, MainActivity.class);
         Intent register = new Intent(this, Register.class);
-        binding.signup.setOnClickListener(v -> {
-            if (binding.loginEmail.getText().toString().isEmpty() || binding.loginPassword.getText().toString().isEmpty()){
-                if (binding.loginEmail.getText().toString().isEmpty()){
-                    binding.loginEmail.setError("This Field Is Required");
-                    binding.loginEmail.requestFocus();
-                }else if (binding.loginPassword.getText().toString().isEmpty()){
-                    binding.loginPassword.setError("This Field Is Required");
-                    binding.loginPassword.requestFocus();
+        binding.buttonSignup.setOnClickListener(v -> {
+            if (binding.email.getText().toString().isEmpty() || binding.password.getText().toString().isEmpty()) {
+                if (binding.email.getText().toString().isEmpty()) {
+                    binding.email.setError("This Field Is Required");
+                    binding.email.requestFocus();
+                } else if (binding.password.getText().toString().isEmpty()) {
+                    binding.password.setError("This Field Is Required");
+                    binding.password.requestFocus();
                 }
                 return;
             }
             progressDialog.show();
-            auth.signInWithEmailAndPassword(binding.loginEmail.getText().toString(), binding.loginPassword.getText().toString()).addOnCompleteListener(task -> {
+            auth.signInWithEmailAndPassword(binding.email.getText().toString(), binding.password.getText().toString()).addOnCompleteListener(task -> {
                 progressDialog.dismiss();
                 if (task.isSuccessful()) {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -71,10 +70,8 @@ public class login extends AppCompatActivity {
                 }
             });
         });
-        binding.btnGoogle.setOnClickListener(v -> {
-            signIn();
-        });
-        binding.btnFb.setOnClickListener(v -> {
+        binding.buttonGoogle.setOnClickListener(v -> signIn());
+        binding.buttonContactNo.setOnClickListener(v -> {
             Intent phone = new Intent(this, contact_no.class);
             startActivity(phone);
         });
@@ -85,9 +82,7 @@ public class login extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        binding.textView.setOnClickListener(v -> {
-            startActivity(register);
-        });
+        binding.textRegister.setOnClickListener(v -> startActivity(register));
         if ((auth.getCurrentUser() != null)) {
             startActivity(intent);
         }
@@ -123,24 +118,21 @@ public class login extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         auth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("TAG", "signInWithCredential:success");
-                            FirebaseUser user = auth.getCurrentUser();
-                            Users users = new Users();
-                            assert user != null;
-                            users.setId(user.getUid());
-                            users.setProfile_pic(Objects.requireNonNull(user.getPhotoUrl()).toString());
-                            users.setUsername(user.getDisplayName());
-                            database.getReference().child("Users").child(user.getUid()).setValue(users);
-                            startActivity(intent);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("TAG", "signInWithCredential:failure", task.getException());
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("TAG", "signInWithCredential:success");
+                        FirebaseUser user = auth.getCurrentUser();
+                        Users users = new Users();
+                        assert user != null;
+                        users.setId(user.getUid());
+                        users.setProfile_pic(Objects.requireNonNull(user.getPhotoUrl()).toString());
+                        users.setUsername(user.getDisplayName());
+                        database.getReference().child("Users").child(user.getUid()).setValue(users);
+                        startActivity(intent);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w("TAG", "signInWithCredential:failure", task.getException());
                     }
                 });
     }

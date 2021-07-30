@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -33,6 +34,7 @@ public class Register extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -44,25 +46,25 @@ public class Register extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Creating Account");
         progressDialog.setMessage("we're creating your account");
-        binding.signup.setOnClickListener(v -> {
-            if (binding.registerEmail.getText().toString().isEmpty() || binding.registerPassword.getText().toString().isEmpty() || binding.registerUsername.getText().toString().isEmpty()) {
-                if (binding.registerEmail.getText().toString().isEmpty()) {
-                    binding.registerEmail.setError("This Field Is Required");
-                    binding.registerEmail.requestFocus();
-                } else if (binding.registerPassword.getText().toString().isEmpty()) {
-                    binding.registerPassword.setError("This Field Is Required");
-                    binding.registerPassword.requestFocus();
-                } else if (binding.registerUsername.getText().toString().isEmpty()) {
-                    binding.registerUsername.setError("This Field Is Required");
-                    binding.registerUsername.requestFocus();
+        binding.buttonSignIn.setOnClickListener(v -> {
+            if (binding.email.getText().toString().isEmpty() || binding.password.getText().toString().isEmpty() || binding.username.getText().toString().isEmpty()) {
+                if (binding.email.getText().toString().isEmpty()) {
+                    binding.email.setError("This Field Is Required");
+                    binding.email.requestFocus();
+                } else if (binding.password.getText().toString().isEmpty()) {
+                    binding.password.setError("This Field Is Required");
+                    binding.password.requestFocus();
+                } else if (binding.username.getText().toString().isEmpty()) {
+                    binding.username.setError("This Field Is Required");
+                    binding.username.requestFocus();
                 }
                 return;
             }
             progressDialog.show();
-            auth.createUserWithEmailAndPassword(binding.registerEmail.getText().toString(), binding.registerPassword.getText().toString()).addOnCompleteListener(task -> {
+            auth.createUserWithEmailAndPassword(binding.email.getText().toString(), binding.password.getText().toString()).addOnCompleteListener(task -> {
                 progressDialog.dismiss();
                 if (task.isSuccessful()) {
-                    Users user = new Users(binding.registerUsername.getText().toString(), binding.registerEmail.getText().toString(), binding.registerPassword.getText().toString());
+                    Users user = new Users(binding.username.getText().toString(), binding.email.getText().toString(), binding.password.getText().toString());
                     String id = Objects.requireNonNull(task.getResult().getUser()).getUid();
                     user.setId(id);
                     database.getReference().child("Users").child(id).setValue(user);
@@ -74,9 +76,9 @@ public class Register extends AppCompatActivity {
                 }
             });
         });
-        binding.btnGoogle.setOnClickListener(v -> signIn());
-        binding.textView.setOnClickListener(v -> startActivity(login));
-        binding.phone.setOnClickListener(v -> {
+        binding.buttonGoogle.setOnClickListener(v -> signIn());
+        binding.alreadyHaveAccountText.setOnClickListener(v -> startActivity(login));
+        binding.buttonMobileNo.setOnClickListener(v -> {
             Intent phone = new Intent(this, contact_no.class);
             startActivity(phone);
         });
@@ -87,7 +89,7 @@ public class Register extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        binding.textView.setOnClickListener(v -> startActivity(login));
+        binding.alreadyHaveAccountText.setOnClickListener(v -> startActivity(login));
         if ((auth.getCurrentUser() != null)) {
             startActivity(intent);
         }
