@@ -35,7 +35,6 @@ public class chatsFragment extends Fragment {
     FirebaseDatabase database;
     private UserAdapter userAdapter;
     private List<Users> users;
-    private List<Users> final_users;
     private List<String> ids;
     RecyclerView recyclerView;
 
@@ -55,7 +54,6 @@ public class chatsFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         users = new ArrayList<>();
-        final_users = new ArrayList<>();
         ids = new ArrayList<>();
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -73,31 +71,31 @@ public class chatsFragment extends Fragment {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Chat chat = ds.getValue(Chat.class);
                     if ((!chat.getReceiver().equals(firebaseUser.getUid())) && (chat.getSender().equals(firebaseUser.getUid()))) {
-                        ids.add(chat.getReceiver());
+                        if (ids.contains(chat.getReceiver())) {
+                            ids.remove(chat.getReceiver());
+                        }
+                        ids.add(0, chat.getReceiver());
                     }
                     if ((!chat.getSender().equals(firebaseUser.getUid())) && (chat.getReceiver().equals(firebaseUser.getUid()))) {
-                        ids.add(chat.getSender());
+                        if (ids.contains(chat.getSender())) {
+                            ids.remove(chat.getSender());
+                        }
+                        ids.add(0, chat.getSender());
                     }
                 }
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Log.v("ids", String.valueOf(ids));
                         users.clear();
-                        for (DataSnapshot ds : snapshot.getChildren()) {
-                            Users user = ds.getValue(Users.class);
-                            if (ids.contains(user.getId())){
-                                users.add(user);
+                        for (int i = 0; i < ids.size(); i++) {
+                            for (DataSnapshot ds : snapshot.getChildren()) {
+                                Users user = ds.getValue(Users.class);
+                                if (ids.get(i).equals(user.getId())) {
+                                    users.add(user);
+                                }
                             }
                         }
-//                        for (int i = 0; i < ids.size(); i++) {
-//                            String string = ids.get(i);
-//                            Users users1 = users.get(i);
-//                            Log.v("response", String.valueOf(i));
-//                            Log.v("response", String.valueOf(ids));
-//                            if (!(users1.getId().equals(string))) {
-//                                users.set(i, users1);
-//                            }
-//                        }
                         userAdapter = new UserAdapter(getActivity(), users);
                         recyclerView.setAdapter(userAdapter);
                     }

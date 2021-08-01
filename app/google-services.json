@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:270112168093:android:cbea5c43fe5a02b57ddc74",
+        "mobilesdk_app_id": "1:270112168093:android:b1f730d4256c8b6e7ddc74",
         "android_client_info": {
           "package_name": "com.sahilasopa.auth"
         }
       },
       "oauth_client": [
         {
-          "client_id": "270112168093-r72u696onb8f1kf6vmp2o4n0k0kl1cde.apps.googleusercontent.com",
+          "client_id": "270112168093-o7olcff9f45j2diaibm8etnag2n0v3b0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.sahilasopa.auth",
-            "certificate_hash": "e267cc11291adf6648ec26db26faff694484ad80"
+            "certificate_hash": "ffcb1b89c38b5006c3e607597b806c064b7011ec"
           }
         },
         {

@@ -20,18 +20,23 @@ import com.google.firebase.database.ValueEventListener;
 import com.sahilasopa.auth.adapter.MessageAdapter;
 import com.sahilasopa.auth.databinding.ActivityMessageBinding;
 import com.sahilasopa.auth.models.Chat;
+import com.sahilasopa.auth.models.ChatList;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MessageActivity extends AppCompatActivity {
-    ActivityMessageBinding binding;
-    FirebaseAuth auth;
-    DatabaseReference reference;
     private MessageAdapter messageAdapter;
     private List<Chat> chats;
-    Chat chat = new Chat();
     long timestamp;
+    ActivityMessageBinding binding;
+    Chat chat = new Chat();
+    ChatList chatList1;
+    DatabaseReference chatList;
+    DatabaseReference reference;
+    FirebaseAuth auth;
+    FirebaseUser firebaseUser;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +44,9 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMessageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        RecyclerView recyclerView;
         setTitle(getIntent().getExtras().get("username").toString());
         reference = FirebaseDatabase.getInstance().getReference("Chats");
+        chatList = FirebaseDatabase.getInstance().getReference("ChatList");
         auth = FirebaseAuth.getInstance();
         chats = new ArrayList<>();
         recyclerView = binding.chats;
@@ -49,21 +54,14 @@ public class MessageActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         binding.editMessage.setOnKeyListener((v, keyCode, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
                 switch (keyCode) {
                     case KeyEvent.KEYCODE_DPAD_CENTER:
                     case KeyEvent.KEYCODE_ENTER:
                         if (!(binding.editMessage.getText().toString().isEmpty())) {
-                            timestamp = System.currentTimeMillis();
-                            assert firebaseUser != null;
-                            chat.setTimestamp(timestamp);
-                            chat.setSender(firebaseUser.getUid());
-                            chat.setReceiver(getIntent().getExtras().get("user").toString());
-                            chat.setMessage(binding.editMessage.getText().toString());
-                            binding.editMessage.setText("");
-                            reference.push().setValue(chat);
+                            sendMessage();
                         }
                         return true;
                     default:
@@ -74,16 +72,13 @@ public class MessageActivity extends AppCompatActivity {
         });
         binding.buttonSend.setOnClickListener(v -> {
             if (!(binding.editMessage.getText().toString().isEmpty())) {
-                assert firebaseUser != null;
-                timestamp = System.currentTimeMillis();
-                chat.setTimestamp(timestamp);
-                chat.setSender(firebaseUser.getUid());
-                chat.setReceiver(getIntent().getExtras().get("user").toString());
-                chat.setMessage(binding.editMessage.getText().toString());
-                binding.editMessage.setText("");
-                reference.push().setValue(chat);
+                sendMessage();
             }
         });
+        getMessage();
+    }
+
+    public void getMessage() {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -94,9 +89,36 @@ public class MessageActivity extends AppCompatActivity {
                     assert firebaseUser != null;
                     if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(getIntent().getExtras().get("user").toString()) ||
                             chat.getReceiver().equals(getIntent().getExtras().get("user").toString()) && chat.getSender().equals(firebaseUser.getUid())) {
+                        timestamp = System.currentTimeMillis();
+//                        if (chat.getReceiver().equals(firebaseUser.getUid())) {
+//                            chatList1 = new ChatList(chat.getSender(), chat.getTimestamp(), firebaseUser.getUid());
+//                        }
+//                        if (chat.getSender().equals(firebaseUser.getUid())) {
+//                            chatList1 = new ChatList(chat.getReceiver(), chat.getTimestamp(), firebaseUser.getUid());
+//                        }
+//                        chatList.addValueEventListener(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                Log.v("response", "called");
+//                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                                    ChatList chatList2 = dataSnapshot.getValue(ChatList.class);
+//                                    assert chatList2 != null;
+//                                    if (chatList2.getMe().equals(firebaseUser.getUid()) && chatList2.getUserId().equals(getIntent().getExtras().get("user"))) {
+//                                        Log.v("data", "get");
+//                                    } else if (!(chatList2.getUserId().equals(getIntent().getExtras().get("user")) && chatList2.getMe().equals(firebaseUser.getUid()))) {
+//                                        Log.v("data", "pushing");
+////                                        chatList.push().setValue(chatList1);
+//                                    }
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError error) {
+//
+//                            }
+//                        });
                         chats.add(chat);
                     }
-//                    recyclerView.smoothScrollToPosition(chats.size() - 1);
                 }
                 messageAdapter = new MessageAdapter(getApplicationContext(), chats);
                 recyclerView.setAdapter(messageAdapter);
@@ -107,5 +129,16 @@ public class MessageActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void sendMessage() {
+        timestamp = System.currentTimeMillis();
+        assert firebaseUser != null;
+        chat.setTimestamp(timestamp);
+        chat.setSender(firebaseUser.getUid());
+        chat.setReceiver(getIntent().getExtras().get("user").toString());
+        chat.setMessage(binding.editMessage.getText().toString());
+        binding.editMessage.setText("");
+        reference.push().setValue(chat);
     }
 }
