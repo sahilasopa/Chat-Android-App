@@ -1,12 +1,15 @@
 package com.sahilasopa.auth;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,9 +23,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.sahilasopa.auth.adapter.MessageAdapter;
 import com.sahilasopa.auth.databinding.ActivityMessageBinding;
 import com.sahilasopa.auth.models.Chat;
-import com.sahilasopa.auth.models.ChatList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MessageActivity extends AppCompatActivity {
@@ -31,8 +34,6 @@ public class MessageActivity extends AppCompatActivity {
     long timestamp;
     ActivityMessageBinding binding;
     Chat chat = new Chat();
-    ChatList chatList1;
-    DatabaseReference chatList;
     DatabaseReference reference;
     FirebaseAuth auth;
     FirebaseUser firebaseUser;
@@ -44,10 +45,33 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMessageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setTitle(getIntent().getExtras().get("username").toString());
-        reference = FirebaseDatabase.getInstance().getReference("Chats");
-        chatList = FirebaseDatabase.getInstance().getReference("ChatList");
         auth = FirebaseAuth.getInstance();
+        setTitle(getIntent().getExtras().get("username").toString());
+        if (auth.getCurrentUser() == null) {
+            Intent intent = new Intent(this, login.class);
+            startActivity(intent);
+        }
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status", "offline");
+        reference = FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid());
+        reference.onDisconnect().updateChildren(hashMap);
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean connected = snapshot.getValue(Boolean.class);
+                if (connected) {
+                    status("online");
+                } else {
+                    System.out.println("not connected");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Listener was cancelled");
+            }
+        });
         chats = new ArrayList<>();
         recyclerView = binding.chats;
         recyclerView.setHasFixedSize(true);
@@ -79,6 +103,7 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     public void getMessage() {
+        reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -90,33 +115,6 @@ public class MessageActivity extends AppCompatActivity {
                     if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(getIntent().getExtras().get("user").toString()) ||
                             chat.getReceiver().equals(getIntent().getExtras().get("user").toString()) && chat.getSender().equals(firebaseUser.getUid())) {
                         timestamp = System.currentTimeMillis();
-//                        if (chat.getReceiver().equals(firebaseUser.getUid())) {
-//                            chatList1 = new ChatList(chat.getSender(), chat.getTimestamp(), firebaseUser.getUid());
-//                        }
-//                        if (chat.getSender().equals(firebaseUser.getUid())) {
-//                            chatList1 = new ChatList(chat.getReceiver(), chat.getTimestamp(), firebaseUser.getUid());
-//                        }
-//                        chatList.addValueEventListener(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                                Log.v("response", "called");
-//                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                                    ChatList chatList2 = dataSnapshot.getValue(ChatList.class);
-//                                    assert chatList2 != null;
-//                                    if (chatList2.getMe().equals(firebaseUser.getUid()) && chatList2.getUserId().equals(getIntent().getExtras().get("user"))) {
-//                                        Log.v("data", "get");
-//                                    } else if (!(chatList2.getUserId().equals(getIntent().getExtras().get("user")) && chatList2.getMe().equals(firebaseUser.getUid()))) {
-//                                        Log.v("data", "pushing");
-////                                        chatList.push().setValue(chatList1);
-//                                    }
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError error) {
-//
-//                            }
-//                        });
                         chats.add(chat);
                     }
                 }
@@ -132,13 +130,37 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     public void sendMessage() {
+        reference = FirebaseDatabase.getInstance().getReference("Chats");
         timestamp = System.currentTimeMillis();
         assert firebaseUser != null;
         chat.setTimestamp(timestamp);
         chat.setSender(firebaseUser.getUid());
         chat.setReceiver(getIntent().getExtras().get("user").toString());
-        chat.setMessage(binding.editMessage.getText().toString());
+        chat.setMessage(binding.editMessage.getText().toString().trim().replaceAll("\\s+", " "));
         binding.editMessage.setText("");
+        binding.editMessage.requestFocus();
         reference.push().setValue(chat);
     }
+
+    public void status(String status) {
+        if (auth.getCurrentUser() != null) {
+            reference = FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid());
+            HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("status", status);
+            reference.updateChildren(hashMap);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("online");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status("offline");
+    }
+
 }

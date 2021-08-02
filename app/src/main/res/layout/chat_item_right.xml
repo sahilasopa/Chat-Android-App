@@ -24,9 +24,24 @@
             android:layout_alignParentRight="true"
             android:background="@drawable/background_right"
             android:padding="8dp"
-            android:text="HOLA"
+            android:text="Hello World"
             android:textColor="#fff"
             android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/show_message"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="-1dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:textSize="12sp"
+            android:gravity="end"
+            android:text="12:00" />
+
     </RelativeLayout>
 
 </RelativeLayout>

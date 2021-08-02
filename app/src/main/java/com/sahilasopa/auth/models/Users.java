@@ -1,12 +1,22 @@
 package com.sahilasopa.auth.models;
 
 public class Users {
-    String profile_pic;
+    String id;
     String username;
     String email;
+    String profile_pic;
     String password;
-    String id;
     String lastMessage;
+    String status;
+    String contact_no;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getContact_no() {
         return contact_no;
@@ -16,16 +26,16 @@ public class Users {
         this.contact_no = contact_no;
     }
 
-    String contact_no;
-
-    public Users(String profile_pic, String username, String email, String password, String id, String lastMessage) {
+    public Users(String profile_pic, String username, String email, String password, String id, String lastMessage, String status) {
         this.profile_pic = profile_pic;
         this.username = username;
         this.email = email;
         this.password = password;
         this.id = id;
         this.lastMessage = lastMessage;
+        this.status = status;
     }
+
     public String getProfile_pic() {
         return profile_pic;
     }
@@ -33,7 +43,7 @@ public class Users {
     public Users() {
     }
 
-    public Users(String username, String email,String  password) {
+    public Users(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;

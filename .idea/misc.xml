@@ -3,14 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/drawable/background_right.xml" value="0.2703125" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/activity_login.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/activity_message.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/activity_register.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/activity_splash.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/activity_verify_otp.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/chat_item_left.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/chat_item_right.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/chat_item_left.xml" value="0.25" />
+        <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/chat_item_right.xml" value="0.4" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/fragment_chats.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/fragment_users.xml" value="0.1793478260869565" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/row.xml" value="0.25416666666666665" />
