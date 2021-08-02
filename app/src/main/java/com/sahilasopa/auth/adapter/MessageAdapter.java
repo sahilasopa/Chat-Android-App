@@ -8,7 +8,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,11 +48,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
         Chat chat = chats.get(position);
         holder.show_message.setText(chat.getMessage());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
         Date date = new Date(chat.getTimestamp());
         String time = simpleDateFormat.format(date);
         holder.time.setText(time);
-
+        if (position == chats.size() - 1) {
+            if (chat.isSeen()) {
+                holder.seen.setText("seen");
+            } else {
+                holder.seen.setText("sent");
+            }
+        } else {
+            holder.seen.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -64,11 +71,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         public TextView show_message;
         public TextView time;
+        public TextView seen;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             show_message = itemView.findViewById(R.id.show_message);
             time = itemView.findViewById(R.id.textView2);
+            seen = itemView.findViewById(R.id.seen);
             show_message.setOnLongClickListener(this);
         }
 

@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,9 +33,11 @@ public class MessageActivity extends AppCompatActivity {
     ActivityMessageBinding binding;
     Chat chat = new Chat();
     DatabaseReference reference;
+    DatabaseReference referenceSeen;
     FirebaseAuth auth;
     FirebaseUser firebaseUser;
     RecyclerView recyclerView;
+    ValueEventListener seenListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,7 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMessageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Log.v("response", "called");
         auth = FirebaseAuth.getInstance();
         setTitle(getIntent().getExtras().get("username").toString());
         if (auth.getCurrentUser() == null) {
@@ -100,6 +101,7 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
         getMessage();
+        seenMessage(getIntent().getExtras().get("user").toString());
     }
 
     public void getMessage() {
@@ -137,6 +139,7 @@ public class MessageActivity extends AppCompatActivity {
         chat.setSender(firebaseUser.getUid());
         chat.setReceiver(getIntent().getExtras().get("user").toString());
         chat.setMessage(binding.editMessage.getText().toString().trim().replaceAll("\\s+", " "));
+        chat.setSeen(false);
         binding.editMessage.setText("");
         binding.editMessage.requestFocus();
         reference.push().setValue(chat);
@@ -151,6 +154,29 @@ public class MessageActivity extends AppCompatActivity {
         }
     }
 
+    public void seenMessage(final String userId) {
+        Log.v("response", "called");
+        referenceSeen = FirebaseDatabase.getInstance().getReference("Chats");
+        seenListener = referenceSeen.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Chat chat = dataSnapshot.getValue(Chat.class);
+                    if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userId)) {
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("seen", true);
+                        dataSnapshot.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -160,6 +186,7 @@ public class MessageActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        referenceSeen.removeEventListener(seenListener);
         status("offline");
     }
 

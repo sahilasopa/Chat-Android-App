@@ -6,11 +6,22 @@ public class Chat {
     private String message;
     private long timestamp;
 
-    public Chat(String sender, String receiver, String message, long timestamp) {
+    public boolean isSeen() {
+        return seen;
+    }
+
+    public void setSeen(boolean seen) {
+        this.seen = seen;
+    }
+
+    private boolean seen;
+
+    public Chat(String sender, String receiver, String message, long timestamp, boolean seen) {
         this.sender = sender;
         this.receiver = receiver;
         this.message = message;
         this.timestamp = timestamp;
+        this.seen = seen;
     }
 
     public Chat() {
