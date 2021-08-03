@@ -70,16 +70,13 @@ public class chatsFragment extends Fragment {
                 ids.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Chat chat = ds.getValue(Chat.class);
+                    assert chat != null;
                     if ((!chat.getReceiver().equals(firebaseUser.getUid())) && (chat.getSender().equals(firebaseUser.getUid()))) {
-                        if (ids.contains(chat.getReceiver())) {
-                            ids.remove(chat.getReceiver());
-                        }
+                        ids.remove(chat.getReceiver());
                         ids.add(0, chat.getReceiver());
                     }
                     if ((!chat.getSender().equals(firebaseUser.getUid())) && (chat.getReceiver().equals(firebaseUser.getUid()))) {
-                        if (ids.contains(chat.getSender())) {
-                            ids.remove(chat.getSender());
-                        }
+                        ids.remove(chat.getSender());
                         ids.add(0, chat.getSender());
                     }
                 }
@@ -91,6 +88,7 @@ public class chatsFragment extends Fragment {
                         for (int i = 0; i < ids.size(); i++) {
                             for (DataSnapshot ds : snapshot.getChildren()) {
                                 Users user = ds.getValue(Users.class);
+                                assert user != null;
                                 if (ids.get(i).equals(user.getId())) {
                                     users.add(user);
                                 }

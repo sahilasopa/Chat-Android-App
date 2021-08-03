@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/drawable/background_right.xml" value="0.2703125" />
+        <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/drawable/circle.xml" value="0.2703125" />
+        <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/drawable/roundedtv.xml" value="0.2703125" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/activity_login.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/activity_message.xml" value="0.25416666666666665" />
