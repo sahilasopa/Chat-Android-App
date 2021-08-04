@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Auth</string>
+    <string name="app_name">Firebase Chat</string>
     <string name="icon">Icon</string>
     <string name="username">Username</string>
     <string name="email">Email</string>
@@ -16,6 +16,4 @@
     <string name="enter_verification_code">Enter Verification Code</string>
     <string name="verify">Verify</string>
     <string name="didn_t_receive_code_resend_otp">Didn\'t Receive Code? Resend OTP</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

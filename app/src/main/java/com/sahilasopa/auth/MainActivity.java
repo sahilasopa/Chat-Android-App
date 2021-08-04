@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.settings) {
-            Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Settings Not Made Yet", Toast.LENGTH_SHORT).show();
         } else if (item.getItemId() == R.id.logout) {
             Intent intent = new Intent(this, login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             auth.signOut();

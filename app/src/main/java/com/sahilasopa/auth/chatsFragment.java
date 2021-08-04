@@ -2,7 +2,6 @@ package com.sahilasopa.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +35,7 @@ public class chatsFragment extends Fragment {
     private UserAdapter userAdapter;
     private List<Users> users;
     private List<String> ids;
+    private List<Chat> unread;
     RecyclerView recyclerView;
 
     @Override
@@ -55,6 +55,7 @@ public class chatsFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         users = new ArrayList<>();
         ids = new ArrayList<>();
+        unread = new ArrayList<Chat>();
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -68,14 +69,21 @@ public class chatsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ids.clear();
+                unread.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Chat chat = ds.getValue(Chat.class);
                     assert chat != null;
                     if ((!chat.getReceiver().equals(firebaseUser.getUid())) && (chat.getSender().equals(firebaseUser.getUid()))) {
+                        // I am the sender
                         ids.remove(chat.getReceiver());
                         ids.add(0, chat.getReceiver());
                     }
                     if ((!chat.getSender().equals(firebaseUser.getUid())) && (chat.getReceiver().equals(firebaseUser.getUid()))) {
+                        if (!chat.isSeen()) {
+                            unread.remove(chat);
+                            unread.add(0, chat);
+                        }
+                        // I am the receiver
                         ids.remove(chat.getSender());
                         ids.add(0, chat.getSender());
                     }
@@ -83,7 +91,6 @@ public class chatsFragment extends Fragment {
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Log.v("ids", String.valueOf(ids));
                         users.clear();
                         for (int i = 0; i < ids.size(); i++) {
                             for (DataSnapshot ds : snapshot.getChildren()) {
@@ -94,7 +101,7 @@ public class chatsFragment extends Fragment {
                                 }
                             }
                         }
-                        userAdapter = new UserAdapter(getActivity(), users, true);
+                        userAdapter = new UserAdapter(getActivity(), users, true, unread);
                         recyclerView.setAdapter(userAdapter);
                     }
 

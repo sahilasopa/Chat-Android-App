@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sahilasopa.auth.MessageActivity;
 import com.sahilasopa.auth.R;
+import com.sahilasopa.auth.models.Chat;
 import com.sahilasopa.auth.models.Users;
 
 import java.util.List;
@@ -22,11 +22,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private final Context context;
     private final List<Users> users;
     private boolean isChat;
+    private List<Chat> unread;
 
     public UserAdapter(Context context, List<Users> users, boolean isChat) {
         this.context = context;
         this.users = users;
         this.isChat = isChat;
+    }
+
+    public UserAdapter(Context context, List<Users> users, boolean isChat, List<Chat> unreads) {
+        this.context = context;
+        this.users = users;
+        this.isChat = isChat;
+        this.unread = unreads;
     }
 
     @NonNull
@@ -41,10 +49,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         Users user = users.get(position);
         holder.textView.setText(user.getUsername());
         if (isChat) {
+            for (int i = 0; i < unread.size(); i++) {
+                Chat chat = unread.get(i);
+                if (chat.getSender().equals(user.getId()) || chat.getReceiver().equals(user.getId())) {
+                    holder.unread.setVisibility(View.VISIBLE);
+                    holder.unread.setText("");
+                }
+            }
             if (user.getStatus() != null) {
                 holder.status.setText(user.getStatus());
-            } else {
-                Toast.makeText(context.getApplicationContext(), "Null", Toast.LENGTH_SHORT).show();
             }
         } else {
             holder.status.setVisibility(View.GONE);
@@ -59,11 +72,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView textView;
         public TextView status;
+        public TextView unread;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.textView);
             status = itemView.findViewById(R.id.textView2);
+            unread = itemView.findViewById(R.id.textView3);
             CardView cardView = itemView.findViewById(R.id.userView);
             textView.setOnClickListener(this);
             cardView.setOnClickListener(this);

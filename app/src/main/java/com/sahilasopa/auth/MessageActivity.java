@@ -2,7 +2,6 @@ package com.sahilasopa.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 
 import androidx.annotation.NonNull;
@@ -45,7 +44,6 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMessageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Log.v("response", "called");
         auth = FirebaseAuth.getInstance();
         setTitle(getIntent().getExtras().get("username").toString());
         if (auth.getCurrentUser() == null) {
@@ -155,7 +153,6 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     public void seenMessage(final String userId) {
-        Log.v("response", "called");
         referenceSeen = FirebaseDatabase.getInstance().getReference("Chats");
         seenListener = referenceSeen.addValueEventListener(new ValueEventListener() {
             @Override

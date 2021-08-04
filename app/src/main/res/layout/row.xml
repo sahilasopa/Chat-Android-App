@@ -56,7 +56,7 @@
             android:layout_marginRight="24dp"
             android:background="@drawable/roundedtv"
             android:gravity="center"
-            android:text="N"
+            android:visibility="gone"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
