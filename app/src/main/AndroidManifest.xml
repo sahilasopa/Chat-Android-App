@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Auth">
         <activity android:name=".MessageActivity"></activity>
-        <activity android:name=".splashActivity">
+        <activity
+            android:name=".splashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
