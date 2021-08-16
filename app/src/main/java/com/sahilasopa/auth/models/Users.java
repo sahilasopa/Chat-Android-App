@@ -14,14 +14,6 @@ public class Users {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getContact_no() {
-        return contact_no;
-    }
-
     public void setContact_no(String contact_no) {
         this.contact_no = contact_no;
     }
@@ -34,10 +26,6 @@ public class Users {
         this.id = id;
         this.lastMessage = lastMessage;
         this.status = status;
-    }
-
-    public String getProfile_pic() {
-        return profile_pic;
     }
 
     public Users() {
@@ -62,36 +50,12 @@ public class Users {
         this.username = username;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getLastMessage() {
-        return lastMessage;
-    }
-
-    public void setLastMessage(String lastMessage) {
-        this.lastMessage = lastMessage;
     }
 
 }

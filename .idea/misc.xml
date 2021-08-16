@@ -4,8 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/drawable/background_right.xml" value="0.2703125" />
+        <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/drawable/chat.xml" value="0.2703125" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/drawable/circle.xml" value="0.2703125" />
+        <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/drawable/edittext.xml" value="0.14322916666666666" />
+        <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/drawable/ic__msg.xml" value="0.2703125" />
+        <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2703125" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/drawable/roundedtv.xml" value="0.2703125" />
+        <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/activity_contact_no.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/activity_login.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/activity_message.xml" value="0.25416666666666665" />
@@ -17,6 +22,7 @@
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/fragment_chats.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/fragment_users.xml" value="0.1793478260869565" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/layout/row.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth-Android-App/app/src/main/res/menu/menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/sahil/AndroidStudioProjects/Auth/app/src/main/res/layout/activity_verify_otp.xml" value="0.10069444444444445" />
       </map>
     </option>
